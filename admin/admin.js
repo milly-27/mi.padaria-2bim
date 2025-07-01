@@ -5,6 +5,7 @@ let usuarios = [];
 let editandoProduto = null;
 let editandoCupom = null;
 let editandoUsuario = null;
+let usuarioAtual = null; // Adicionar variável para armazenar usuário atual
 
 // Dados do usuário administrador protegido
 const ADMIN_PROTEGIDO = {
@@ -27,6 +28,7 @@ function inicializarPagina() {
   const usuario = verificarAutenticacao();
   if (usuario) {
     console.log('Usuário autenticado:', usuario);
+    usuarioAtual = usuario; // Armazenar usuário atual
     mostrarInterfaceUsuario(usuario);
     carregarTodosDados();
   }
@@ -126,12 +128,34 @@ function verificarAutenticacao() {
 }
 
 function mostrarInterfaceUsuario(usuario) {
+  console.log('Mostrando interface para usuário:', usuario);
+  
   const userInfoDiv = document.getElementById('user-info');
   const userNameSpan = document.getElementById('user-name');
   
   if (userNameSpan && userInfoDiv) {
-    userNameSpan.textContent = usuario.username;
+    // Limpar conteúdo anterior e definir novo nome
+    userNameSpan.textContent = '';
+    userNameSpan.textContent = usuario.username || usuario.name || 'Usuário';
     userInfoDiv.style.display = 'block';
+    
+    console.log('Nome do usuário definido no span:', userNameSpan.textContent);
+  } else {
+    console.error('Elementos user-info ou user-name não encontrados no DOM');
+  }
+  
+  // Garantir que o usuário atual está sempre atualizado
+  usuarioAtual = usuario;
+}
+
+// Função para atualizar nome do usuário (pode ser chamada quando necessário)
+function atualizarNomeUsuario() {
+  if (usuarioAtual) {
+    const userNameSpan = document.getElementById('user-name');
+    if (userNameSpan) {
+      userNameSpan.textContent = usuarioAtual.username || usuarioAtual.name || 'Usuário';
+      console.log('Nome do usuário atualizado:', userNameSpan.textContent);
+    }
   }
 }
 
@@ -144,6 +168,7 @@ function redirecionarParaLogin(mensagem) {
 function logout() {
   localStorage.removeItem('userSession');
   localStorage.removeItem('currentUser');
+  usuarioAtual = null; // Limpar usuário atual
   alert('Logout realizado com sucesso!');
   window.location.href = '../login/login.html';
 }
@@ -179,7 +204,14 @@ function iniciarVerificacaoPeriodica() {
         if (agora > session.expiraEm) {
           console.log('Sessão expirou durante verificação periódica');
           localStorage.removeItem('userSession');
+          usuarioAtual = null; // Limpar usuário atual
           redirecionarParaLogin('Sua sessão expirou. Faça login novamente.');
+        } else {
+          // Verificar se o usuário mudou e atualizar interface
+          if (usuarioAtual && session.usuario.username !== usuarioAtual.username) {
+            usuarioAtual = session.usuario;
+            mostrarInterfaceUsuario(usuarioAtual);
+          }
         }
       } catch (error) {
         console.error('Erro na verificação periódica:', error);
@@ -200,7 +232,7 @@ function isUsuarioAdminProtegido(email) {
   return email === ADMIN_PROTEGIDO.email;
 }
 
-// Funções de navegação entre abas - SIMPLIFICADA
+// Funções de navegação entre abas - MELHORADA
 function mostrarAba(aba) {
   // Verificação mais leve - apenas verifica se existe sessão
   const sessionData = localStorage.getItem('userSession');
@@ -208,6 +240,9 @@ function mostrarAba(aba) {
     redirecionarParaLogin('Sessão não encontrada.');
     return;
   }
+
+  // Atualizar nome do usuário toda vez que trocar de aba
+  atualizarNomeUsuario();
 
   // Esconder todas as abas
   document.querySelectorAll('.tab-content').forEach(tab => {
@@ -238,6 +273,8 @@ async function carregarTodosDados() {
       carregarUsuarios()
     ]);
     console.log('Todos os dados carregados com sucesso');
+    // Garantir que o nome do usuário está correto após carregar dados
+    atualizarNomeUsuario();
   } catch (error) {
     console.error('Erro ao carregar dados:', error);
   }
@@ -360,6 +397,7 @@ function renderizarUsuarios() {
   });
 }
 
+// Resto do código permanece igual...
 // Funções de modal - SIMPLIFICADAS
 function abrirModalProduto() {
   editandoProduto = null;
