@@ -1,0 +1,485 @@
+/* ========== GLOBAL ========== */
+* {
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f0f8ff;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* ========== HEADER ========== */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 65px;
+  background: linear-gradient(135deg, #ff69b4, #ff1493);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+  box-shadow: 0 4px 12px rgba(255, 105, 180, 0.4);
+  z-index: 10;
+}
+
+header h1 {
+  font-size: 1.4rem;
+  color: white;
+  margin: 0;
+  font-weight: bold;
+  font-family: 'Arial Black', Arial, sans-serif;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ========== HEADER ACTIONS ========== */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Área de informações do usuário logado */
+#user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 8px 16px;
+  border-radius: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+#user-name {
+  color: white;
+  font-weight: bold;
+  font-size: 0.95rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+#logout-btn {
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+#logout-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Botão de login */
+.login-button {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #fff, #f8f8ff);
+  color: #ff1493;
+  border: 2px solid #ff1493;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255, 20, 147, 0.3);
+}
+
+.login-button:hover {
+  background: linear-gradient(135deg, #ff1493, #c71585);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 20, 147, 0.4);
+}
+
+/* ========== CONTAINER ========== */
+.container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 1200px;
+  height: 85vh;
+  margin-top: 75px;
+  border: 3px solid #ff69b4;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 8px 24px rgba(255, 105, 180, 0.3);
+}
+
+/* ========== MENU LATERAL ========== */
+.menu {
+  flex: 1;
+  min-width: 180px;
+  background: linear-gradient(180deg, #ffe4e1, #ffb6c1);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu button {
+  padding: 12px 16px;
+  width: 100%;
+  border: none;
+  background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.menu button:hover {
+  background: linear-gradient(135deg, #ff69b4, #ff1493);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* ========== PRODUTOS ========== */
+.produtos {
+  flex: 2;
+  background: linear-gradient(135deg, #e6f7ff, #f0f8ff);
+  padding: 20px;
+  overflow-y: auto;
+  border-radius: 0 20px 20px 0;
+}
+
+.categoria {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+  justify-items: center;
+  align-items: start;
+}
+
+/* ========== CARD PRODUTO ========== */
+.card {
+  background: linear-gradient(135deg, #fff, #f8f8ff);
+  border: 2px solid #ff69b4;
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 6px 12px rgba(255, 105, 180, 0.2);
+  text-align: center;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(255, 105, 180, 0.4);
+  border-color: #ff1493;
+}
+
+.card img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card h4 {
+  margin: 12px 0 8px;
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: bold;
+  min-height: 1.3em;
+}
+
+.card p {
+  color: #ff1493;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+
+.card button {
+  background: linear-gradient(135deg, #ff69b4, #ff1493);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: bold;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 6px rgba(255, 105, 180, 0.3);
+  margin-top: auto;
+}
+
+.card button:hover {
+  background: linear-gradient(135deg, #ff1493, #c71585);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(255, 105, 180, 0.4);
+}
+
+/* Responsivo - mantém 3 colunas até telas menores */
+@media (max-width: 900px) {
+  .categoria {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+  }
+  
+  .card {
+    max-width: 160px;
+    padding: 12px;
+  }
+  
+  .card h4 {
+    font-size: 1rem;
+  }
+  
+  .card p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 650px) {
+  .categoria {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 450px) {
+  .categoria {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========== CARRINHO ========== */
+.carrinho {
+  flex: 1.3;
+  min-width: 280px;
+  background: linear-gradient(180deg, #fffacd, #fff8dc);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  overflow-y: auto;
+  border-radius: 20px 0 0 20px;
+  box-shadow: inset 0 0 15px rgba(255, 182, 193, 0.3);
+}
+
+.carrinho h3 {
+  color: #ff1493;
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* ========== TABELA CARRINHO ========== */
+.tabela-carrinho {
+  width: 100%;
+  overflow-x: auto;
+  text-align: center;
+  font-size: 12px;
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 5px;
+  table-layout: fixed;
+  font-size: 12px;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+  background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+  color: white;
+}
+
+th, td {
+  border: 1px solid #ffe4e1;
+  padding: 8px 6px;
+  text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+th {
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+td input[type="number"] {
+  width: 50px;
+  padding: 4px 6px;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 6px;
+  border: 2px solid #ff69b4;
+  background: #fff;
+}
+
+/* ========== AÇÕES CARRINHO ========== */
+.acoes {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.acoes button {
+  padding: 4px 8px;
+  background: linear-gradient(135deg, #ff7f50, #ff4500);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.acoes button:hover {
+  background: linear-gradient(135deg, #ff4500, #dc143c);
+  transform: scale(1.05);
+}
+
+/* ========== TOTAL E BOTÃO PRÓXIMO ========== */
+#total {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ff1493;
+  margin: 15px 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.8);
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 2px solid #ff69b4;
+}
+
+#btn-proximo {
+  width: 100%;
+  padding: 15px 20px;
+  background: linear-gradient(135deg, #32cd32, #228b22);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 12px rgba(50, 205, 50, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 10px;
+}
+
+#btn-proximo:hover {
+  background: linear-gradient(135deg, #228b22, #006400);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(50, 205, 50, 0.4);
+}
+
+#btn-proximo:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(50, 205, 50, 0.3);
+}
+
+/* ========== PAINEL ADMINISTRATIVO ========== */
+#painel-adm {
+  background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+  padding: 15px;
+  margin: 10px 25px;
+  border-radius: 10px;
+  border: 2px solid #ffc107;
+  box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+#painel-adm h2 {
+  color: #856404;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+#painel-adm button {
+  padding: 8px 12px;
+  margin: 5px;
+  background: linear-gradient(135deg, #ffc107, #e0a800);
+  color: #856404;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+#painel-adm button:hover {
+  background: linear-gradient(135deg, #e0a800, #d39e00);
+  transform: translateY(-1px);
+}
+
+/* ========== BOTÃO ADMIN MELHORADO ========== */
+.admin-button {
+  background: linear-gradient(135deg, #9b59b6, #8e44ad) !important;
+  color: white !important;
+  border: 2px solid #8e44ad !important;
+  padding: 10px 18px !important;
+  border-radius: 25px !important;
+  cursor: pointer;
+  font-size: 0.9rem !important;
+  font-weight: bold !important;
+  margin-left: 15px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-button::before {
+  content: '👑';
+  margin-right: 8px;
+  font-size: 1.1em;
+}
+
+.admin-button:hover {
+  background: linear-gradient(135deg, #8e44ad, #6c3483) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(142, 68, 173, 0.4) !important;
+  border-color: #6c3483 !important;
+}
+
+.admin-button:active {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(142, 68, 173, 0.3) !important;
+}
+
+#gerente-panel {
+  display: inline-block;
+}

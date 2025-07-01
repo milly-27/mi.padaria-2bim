@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cupons - Delícias Pink Delfins</title>
+  <link rel="stylesheet" href="cupom.css">
+</head>
+<body>
+
+  <header>
+    <h1>Padaria Pink Delfins - Cupons</h1>
+    <div class="header-actions">
+      <div id="user-info" style="display: none;">
+        <span id="user-name"></span>
+        <button id="logout-btn" onclick="logout()">Sair</button>
+      </div>
+      <div id="login-prompt" style="display: none;">
+        <button onclick="irParaLogin()" class="login-button">Fazer Login</button>
+      </div>
+      <a href="../principal/index.html" class="voltar-button">Voltar</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="resumo-pedido">
+      <h2>Resumo do Pedido</h2>
+      <div id="itens-carrinho"></div>
+      <div class="totais">
+        <p id="subtotal">Subtotal: R$ 0,00</p>
+        <p id="desconto" style="display: none;">Desconto: R$ 0,00</p>
+        <p id="total-final">Total: R$ 0,00</p>
+      </div>
+    </section>
+
+    <section class="cupom-section">
+      <h2>Aplicar Cupom de Desconto</h2>
+      <div class="cupom-form">
+        <input type="text" id="codigo-cupom" placeholder="Digite o código do cupom" maxlength="20">
+        <button onclick="aplicarCupom()">Aplicar Cupom</button>
+      </div>
+      <div id="mensagem-cupom" class="mensagem"></div>
+      <div id="cupom-aplicado" class="cupom-aplicado" style="display: none;">
+        <p>Cupom aplicado: <span id="cupom-codigo"></span></p>
+        <button onclick="removerCupom()">Remover Cupom</button>
+      </div>
+    </section>
+
+    <section class="acoes">
+      <button onclick="voltarParaCarrinho()" class="btn-secundario">Voltar ao Carrinho</button>
+      <button id="btn-finalizar" onclick="verificarLoginEProsseguir()" class="btn-primario">Finalizar Pedido</button>
+    </section>
+  </main>
+
+  <script src="cupom.js"></script>
+
+</body>
+</html>
+

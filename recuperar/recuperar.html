@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recuperar Senha</title>
+  <link rel="stylesheet" href="recuperar.css" />
+</head>
+<body>
+  <div class="recuperar-box">
+    <h2>Recuperar Senha</h2>
+
+    <input type="text" id="usuario" placeholder="Digite seu usuário" required />
+    <input type="email" id="email" placeholder="Digite seu e-mail" required />
+    <button onclick="enviarToken()">Enviar Token</button>
+
+    <div id="area-token" style="display:none; margin-top:1rem;">
+      <input type="text" id="token" placeholder="Digite o token recebido" />
+      <button onclick="verificarToken()">Verificar Token</button>
+    </div>
+
+    <div id="area-nova-senha" style="display:none; margin-top:1rem;">
+      <input type="password" id="novaSenha" placeholder="Digite a nova senha" />
+      <span class="toggle-senha" onclick="mostrarSenha('novaSenha')">👁</span>
+      <button onclick="trocarSenha()">Trocar Senha</button>
+    </div>
+
+    <!-- Botão para voltar ao login -->
+    <button onclick="window.location.href='../login/login.html'" style="margin-top:1rem;">Voltar ao Login</button>
+
+    <p id="mensagem" style="color:red; margin-top:1rem;"></p>
+  </div>
+
+  <script src="recuperar.js"></script>
+  <script src="../admin/server.js"></script>
+
+</body>
+</html>

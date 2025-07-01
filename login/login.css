@@ -1,0 +1,143 @@
+body {
+  margin: 0;
+  background: #fef6e4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: 'Arial', sans-serif;
+}
+
+.login-container {
+  background: #fff8dc;
+  padding: 25px 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px #ffa07a;
+  width: 90%;
+  max-width: 320px;
+  text-align: center;
+  position: relative;
+}
+
+.login-container h2 {
+  font-size: 36px;
+  color: #ff69b4;
+  margin-bottom: 20px;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  padding: 10px;
+  font-size: 14px;
+  border: 2px solid #ff69b4;
+  border-radius: 8px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+  margin-bottom: 15px;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus {
+  border-color: #ff1493;
+}
+
+.senha-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.senha-container input {
+  width: 100%;
+  padding-right: 35px; /* espaço para botão olho */
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+  font-size: 14px;
+}
+
+.toggle-senha {
+  position: absolute;
+  right: 5px; /* olho coladinho à direita */
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #ff69b4;
+  user-select: none;
+  transition: color 0.3s;
+  padding: 0;
+  width: 24px;  /* tamanho fixo */
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* Ao passar o mouse no olho só muda a cor do olho, não o input nem o fundo */
+.toggle-senha:hover {
+  color: #ff1493;
+  background: transparent !important;
+}
+
+/* Remove outline do botão para não mudar visual ao focar */
+.toggle-senha:focus {
+  outline: none;
+}
+
+button {
+  padding: 10px 18px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #ffb6c1;
+  color: #333;
+  transition: background-color 0.3s, color 0.3s;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+button:hover {
+  background-color: #ff69b4;
+  color: white;
+}
+
+#mensagem {
+  margin-top: 10px;
+  font-size: 14px;
+  min-height: 20px;
+  color: #ff4500;
+}
+
+a {
+  color: #ff69b4;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 20px 15px;
+  }
+
+  .login-container h2 {
+    font-size: 28px;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+}

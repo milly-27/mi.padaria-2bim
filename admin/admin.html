@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo - Padaria Pink Delfins</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <header>
+    <h1>Painel Administrativo - Padaria Pink Delfins</h1>
+    <div class="header-actions">
+      <div id="user-info" style="display: none;">
+        <span id="user-name"></span>
+        <button id="logout-btn" onclick="logout()">Sair</button>
+      </div>
+      <a href="../principal/index.html" class="voltar-button">Voltar à Loja</a>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-button active" onclick="mostrarAba('produtos')">Produtos</button>
+    <button class="tab-button" onclick="mostrarAba('cupons')">Cupons</button>
+    <button class="tab-button" onclick="mostrarAba('usuarios')">Usuários</button>
+  </nav>
+
+  <main class="container">
+    
+    <!-- Aba Produtos -->
+    <section id="produtos" class="tab-content active">
+      <div class="section-header">
+        <h2>Gerenciar Produtos</h2>
+        <button onclick="abrirModalProduto()" class="btn-adicionar">+ Adicionar Produto</button>
+      </div>
+      <input type="text" id="pesquisa-produtos" placeholder="Buscar produto..." oninput="filtrarTabela('pesquisa-produtos', 'tabela-produtos')">
+
+      <div class="table-container">
+
+        <table id="tabela-produtos">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Preço</th>
+              <th>Categoria</th>
+              <th>Imagem</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="lista-produtos"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Aba Cupons -->
+    <section id="cupons" class="tab-content">
+      <div class="section-header">
+        <h2>Gerenciar Cupons</h2>
+        <button onclick="abrirModalCupom()" class="btn-adicionar">+ Adicionar Cupom</button>
+      </div>
+      <input type="text" id="pesquisa-cupons" placeholder="Buscar cupom..." oninput="filtrarTabela('pesquisa-cupons', 'tabela-cupons')">
+
+      <div class="table-container">
+        <table id="tabela-cupons">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Desconto (%)</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="lista-cupons"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Aba Usuários -->
+    <section id="usuarios" class="tab-content">
+      <div class="section-header">
+        <h2>Gerenciar Usuários</h2>
+        <button onclick="abrirModalUsuario()" class="btn-adicionar">+ Adicionar Usuário</button>
+      </div>
+      <input type="text" id="pesquisa-usuarios" placeholder="Buscar usuário..." oninput="filtrarTabela('pesquisa-usuarios', 'tabela-usuarios')">
+
+      <div class="table-container">
+        <table id="tabela-usuarios">
+          <thead>
+            <tr>
+              <th>Nome de Usuário</th>
+              <th>Email</th>
+              <th>Senha</th>
+              <th>Tipo</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="lista-usuarios"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal Produto -->
+  <div id="modal-produto" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="titulo-modal-produto">Adicionar Produto</h3>
+        <span class="close" onclick="fecharModal('modal-produto')">&times;</span>
+      </div>
+      <form id="form-produto" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="nome-produto">Nome:</label>
+          <input type="text" id="nome-produto" required>
+        </div>
+        <div class="form-group">
+          <label for="preco-produto">Preço:</label>
+          <input type="number" id="preco-produto" step="0.01" min="0" required>
+        </div>
+        <div class="form-group">
+          <label for="categoria-produto">Categoria:</label>
+          <select id="categoria-produto" required>
+            <option value="">Selecione uma categoria</option>
+            <option value="doces">Doces</option>
+            <option value="salgados">Salgados</option>
+            <option value="bebidas">Bebidas</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="imagem-produto">Imagem:</label>
+          <input type="file" id="upload-imagem-produto" accept="image/*" onchange="uploadImagem()">
+          <input type="text" id="imagem-produto" placeholder="URL da imagem será preenchida automaticamente" readonly>
+        </div>
+        <div class="form-actions">
+          <button type="button" onclick="fecharModal('modal-produto')" class="btn-cancelar">Cancelar</button>
+          <button type="submit" class="btn-salvar">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Cupom -->
+  <div id="modal-cupom" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="titulo-modal-cupom">Adicionar Cupom</h3>
+        <span class="close" onclick="fecharModal('modal-cupom')">&times;</span>
+      </div>
+      <form id="form-cupom">
+        <div class="form-group">
+          <label for="codigo-cupom">Código:</label>
+          <input type="text" id="codigo-cupom" style="text-transform: uppercase;" required>
+        </div>
+        <div class="form-group">
+          <label for="desconto-cupom">Desconto (%):</label>
+          <input type="number" id="desconto-cupom" step="0.01" min="0" max="100" required>
+        </div>
+        <div class="form-actions">
+          <button type="button" onclick="fecharModal('modal-cupom')" class="btn-cancelar">Cancelar</button>
+          <button type="submit" class="btn-salvar">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Usuário -->
+  <div id="modal-usuario" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="titulo-modal-usuario">Adicionar Usuário</h3>
+        <span class="close" onclick="fecharModal('modal-usuario')">&times;</span>
+      </div>
+      <form id="form-usuario">
+        <div class="form-group">
+          <label for="username-usuario">Nome de Usuário:</label>
+          <input type="text" id="username-usuario" required>
+        </div>
+        <div class="form-group">
+          <label for="email-usuario">Email:</label>
+          <input type="email" id="email-usuario" required>
+        </div>
+        <div class="form-group">
+          <label for="senha-usuario">Senha:</label>
+          <input type="password" id="senha-usuario" required>
+        </div>
+        <div class="form-group">
+          <label for="tipo-usuario">Tipo:</label>
+          <select id="tipo-usuario" required>
+            <option value="cliente">Cliente</option>
+            <option value="gerente">Gerente</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="button" onclick="fecharModal('modal-usuario')" class="btn-cancelar">Cancelar</button>
+          <button type="submit" class="btn-salvar">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+
+</body>
+</html>
+

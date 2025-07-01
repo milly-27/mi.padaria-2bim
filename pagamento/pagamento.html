@@ -1,0 +1,44 @@
+<!DOCTYPE html> <!-- Define o tipo de documento como HTML5 -->
+<html lang="pt-br"> <!-- Define o idioma da página como português do Brasil -->
+<head>
+  <meta charset="UTF-8" /> <!-- Define a codificação de caracteres como UTF-8 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/> <!-- Configura a visualização em dispositivos móveis -->
+  <title>Pagamento | Doceria Pink Delfins</title> <!-- Define o título da página que aparece na aba do navegador -->
+  <link rel="stylesheet" href="pagamento.css" /> <!-- Importa o arquivo de estilos CSS -->
+</head>
+<body> <!-- Corpo da página -->
+
+  <!-- Tag <main> representa o conteúdo principal da página -->
+  <main class="pagamento-container"> 
+
+    <h1>Escolha a forma de pagamento</h1> <!-- Título principal da página -->
+
+    <!-- Tag <section> agrupa as opções de pagamento -->
+    <section class="opcoes-pagamento"> 
+      <button class="btn-pagamento cartao" onclick="pagarCartao()">💳 Cartão</button> <!-- Botão para pagamento com cartão -->
+      <button class="btn-pagamento pix" onclick="pagarPIX()">🔗 PIX</button> <!-- Botão para pagamento via PIX -->
+    </section>
+
+    <!-- Tag <section> usada para exibir a área do QR Code do PIX -->
+    <section id="qrcode-area" class="qrcode-area" style="display: none;"> 
+      <h2>Escaneie o QR Code para pagar com PIX</h2> <!-- Subtítulo explicando a ação necessária -->
+      <div id="qrcode"></div> <!-- Elemento onde o QR Code será renderizado via JavaScript -->
+    </section>
+
+    <!-- Tag <footer> representa a parte final da seção de pagamento (ações finais) -->
+    <footer class="botoes-finais"> 
+      <button class="btn-voltar" onclick="voltar()">🔙 Voltar</button> <!-- Botão para voltar à etapa anterior -->
+      <div id="valor-final">Total a pagar: R$ <span id="valor-final-span">0.00</span></div> <!-- Exibe o valor total a ser pago -->
+      <button class="btn-confirmar" onclick="confirmarPagamento()">🎉 Pago</button> <!-- Botão para confirmar o pagamento -->
+    </footer>
+
+  </main>
+
+  <canvas id="confetti-canvas"></canvas> <!-- Área de canvas usada para animação de confetes -->
+
+  <!-- Importa bibliotecas externas para animação e QR code -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script> <!-- Biblioteca de confete -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script> <!-- Biblioteca para gerar QR Code -->
+  <script src="pagamento.js"></script> <!-- Script JavaScript principal da página -->
+</body>
+</html>

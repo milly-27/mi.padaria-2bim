@@ -1,0 +1,19 @@
+name,price,image,category
+Brigadeiro,2.5,/imagens/brigadeiro.jpeg,doces
+Bolo,5,/imagens/bolo.jpeg,doces
+Torta,6,/imagens/torta.jpeg,doces
+Cupcake,4,/imagens/cupcake.jpeg,doces
+Pudim,3.5,/imagens/pudim.jpeg,doces
+Coxinha,3,/imagens/coxinha.jpeg,salgados
+Pastel,4,/imagens/pastel.jpeg,salgados
+Empada,3.5,/imagens/empada.jpeg,salgados
+Esfiha,4.5,/imagens/esfira.jpeg,salgados
+Kibe,3,/imagens/kibe.jpeg,salgados
+Coca cola,5,/imagens/refri.jpeg,bebidas
+Suco,4,/imagens/suco.jpeg,bebidas
+Água,2,/imagens/agua.jpeg,bebidas
+Chá,3.5,/imagens/cha.jpeg,bebidas
+Café,2.5,/imagens/cafe.jpeg,bebidas
+cookie,5,/imagens/image-1751329689786-482199138.jpg,doces
+brownie,7,/imagens/image-1751332885951-457953438.jpeg,doces
+cocada,4,,doces
