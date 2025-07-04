@@ -2,7 +2,6 @@
 let doces = [];
 let salgados = [];
 let bebidas = [];
-let todosProdutos = []; // NOVO: Array para armazenar todos os produtos
 
 function carregarProdutos() {
   fetch('http://localhost:3000/produtos') // Agora pega do backend em JSON
@@ -14,7 +13,6 @@ function carregarProdutos() {
       doces = [];
       salgados = [];
       bebidas = [];
-      todosProdutos = []; // NOVO: Limpar array de todos produtos
 
       dados.forEach(produto => {
         const item = {
@@ -22,9 +20,6 @@ function carregarProdutos() {
           preco: parseFloat(produto.price),
           imagem: produto.image || ''
         };
-
-        // NOVO: Adicionar ao array de todos produtos
-        todosProdutos.push(item);
 
         if (produto.category === 'doces') {
           doces.push(item);
@@ -39,9 +34,6 @@ function carregarProdutos() {
       mostrarDoces();
       mostrarSalgados();
       mostrarBebidas();
-      
-      // NOVO: Atualizar carrinho após carregar produtos para sincronizar preços
-      atualizarCarrinho();
     })
     .catch(error => {
       console.error('Erro ao carregar produtos:', error);
@@ -124,16 +116,12 @@ function adicionarBebidas(index) {
 }
 
 function adicionarAoCarrinho(produto) {
-  // MODIFICADO: Agora armazenamos apenas nome e quantidade, não o preço
+  // Permite adicionar ao carrinho mesmo sem estar logado
   let existente = carrinho.find(item => item.nome === produto.nome);
   if (existente) {
     existente.quantidade++;
   } else {
-    // NOVO: Armazenar apenas nome e quantidade
-    carrinho.push({ 
-      nome: produto.nome, 
-      quantidade: 1 
-    });
+    carrinho.push({ ...produto, quantidade: 1 });
   }
   localStorage.setItem('carrinho', JSON.stringify(carrinho));
   atualizarCarrinho();
@@ -143,18 +131,6 @@ function adicionarAoCarrinho(produto) {
   
   // Mostrar notificação visual (opcional)
   mostrarNotificacao(`${produto.nome} adicionado ao carrinho!`);
-}
-
-// NOVA FUNÇÃO: Buscar preço atual de um produto
-function buscarPrecoAtual(nomeProduto) {
-  const produto = todosProdutos.find(p => p.nome === nomeProduto);
-  return produto ? produto.preco : 0;
-}
-
-// NOVA FUNÇÃO: Buscar informações completas de um produto
-function buscarProdutoCompleto(nomeProduto) {
-  const produto = todosProdutos.find(p => p.nome === nomeProduto);
-  return produto || null;
 }
 
 function mostrarNotificacao(mensagem) {
@@ -183,7 +159,6 @@ function mostrarNotificacao(mensagem) {
   }, 3000);
 }
 
-// FUNÇÃO MODIFICADA: Agora busca preços atuais
 function atualizarCarrinho() {
   let corpoCarrinho = document.getElementById('corpo-carrinho');
   let totalEl = document.getElementById('total');
@@ -191,46 +166,26 @@ function atualizarCarrinho() {
 
   corpoCarrinho.innerHTML = '';
   let total = 0;
-  let carrinhoAtualizado = []; // NOVO: Para remover produtos que não existem mais
 
   carrinho.forEach((item, index) => {
-    // NOVO: Buscar preço atual do produto
-    const precoAtual = buscarPrecoAtual(item.nome);
-    const produtoCompleto = buscarProdutoCompleto(item.nome);
-    
-    // Se o produto não existe mais, pular
-    if (!produtoCompleto) {
-      console.log(`Produto "${item.nome}" não encontrado. Removendo do carrinho.`);
-      return;
-    }
-    
-    // Adicionar ao carrinho atualizado
-    carrinhoAtualizado.push(item);
-    
-    let subtotal = precoAtual * item.quantidade;
+    let subtotal = item.preco * item.quantidade;
     total += subtotal;
 
     let tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${item.nome}</td>
       <td>
-        <input type="number" min="1" value="${item.quantidade}" onchange="atualizarQuantidadeDireta(${carrinhoAtualizado.length - 1}, this.value)">
+        <input type="number" min="1" value="${item.quantidade}" onchange="atualizarQuantidadeDireta(${index}, this.value)">
       </td>
-      <td>R$ ${precoAtual.toFixed(2)}</td>
+      <td>R$ ${item.preco.toFixed(2)}</td>
       <td>R$ ${subtotal.toFixed(2)}</td>
       <td>
-        <button onclick="alterarQuantidade(${carrinhoAtualizado.length - 1}, -1)">-</button>
-        <button onclick="alterarQuantidade(${carrinhoAtualizado.length - 1}, 1)">+</button>
+        <button onclick="alterarQuantidade(${index}, -1)">-</button>
+        <button onclick="alterarQuantidade(${index}, 1)">+</button>
       </td>
     `;
     corpoCarrinho.appendChild(tr);
   });
-
-  // NOVO: Atualizar carrinho removendo produtos inexistentes
-  if (carrinhoAtualizado.length !== carrinho.length) {
-    carrinho = carrinhoAtualizado;
-    localStorage.setItem('carrinho', JSON.stringify(carrinho));
-  }
 
   totalEl.textContent = `Total: R$ ${total.toFixed(2)}`;
 }
@@ -320,28 +275,23 @@ function verificarUsuarioLogado() {
   }
 }
 
-// NOVA FUNÇÃO: Logout manual com opção de limpar dados
-function logoutManual() {
-  const limparTudo = confirm('Deseja limpar todos os dados (carrinho e login) ou apenas fazer logout?\n\nOK = Limpar tudo\nCancelar = Apenas logout');
+function logout() {
+  // Perguntar se o usuário deseja manter o carrinho
+  const manterCarrinho = confirm('Deseja manter os itens no carrinho após o logout?');
   
-  if (limparTudo) {
-    // Limpar carrinho também
+  if (!manterCarrinho) {
     carrinho = [];
     localStorage.removeItem('carrinho');
     atualizarCarrinho();
   }
   
-  // Sempre remover login
   localStorage.removeItem('currentUser');
+  
   verificarUsuarioLogado();
   
   alert('Logout realizado com sucesso!');
+  // Recarregar a página para atualizar a interface
   window.location.reload();
-}
-
-function logout() {
-  // Usar a nova função de logout manual
-  logoutManual();
 }
 
 // Função principal de inicialização - combinando ambos os window.onload
@@ -354,13 +304,8 @@ function inicializarPagina() {
   // Carregar produtos
   carregarProdutos();
   
-  // NOVO: Configurar atualização periódica dos preços (opcional)
-  // Atualizar preços a cada 30 segundos
-  setInterval(() => {
-    if (carrinho.length > 0) {
-      carregarProdutos(); // Recarrega produtos e atualiza carrinho automaticamente
-    }
-  }, 30000); // 30 segundos
+  // Atualizar carrinho
+  atualizarCarrinho();
   
   console.log('Página inicializada com sucesso!');
 }
@@ -371,54 +316,38 @@ window.addEventListener('load', inicializarPagina);
 // Variável para controlar se está navegando dentro do site
 let navegandoNoSite = false;
 
-// MODIFICADO: Marcar quando está navegando dentro do site - tempo maior
+// Marcar quando está navegando dentro do site
 function marcarNavegacaoInterna() {
   navegandoNoSite = true;
-  // MODIFICADO: Resetar após um tempo maior para dar tempo de navegação
+  // Resetar após um tempo curto
   setTimeout(() => {
     navegandoNoSite = false;
-  }, 2000); // Aumentado para 2 segundos
+  }, 1000);
 }
 
-// MODIFICADO: Limpar dados apenas quando realmente sair/fechar o site
+// Limpar dados apenas quando realmente sair do site (fechar aba/navegador)
 window.addEventListener('beforeunload', function(e) {
   // Se está navegando dentro do site, não fazer logout
   if (navegandoNoSite) {
     return;
   }
   
-  // MODIFICADO: Não remover currentUser aqui para manter login entre navegações
-  // Apenas limpar carrinho para usuários não logados
+  // Limpar carrinho para usuários não logados
   const currentUser = localStorage.getItem('currentUser');
   if (!currentUser) {
     localStorage.removeItem('carrinho');
   }
   
-  // REMOVIDO: localStorage.removeItem('currentUser') para manter login
+  // Sempre limpar o login (deslogar usuário) apenas quando fechar aba
+  localStorage.removeItem('currentUser');
 });
 
-// NOVA FUNÇÃO: Logout apenas quando realmente necessário (fechar aba/navegador)
-window.addEventListener('pagehide', function(e) {
-  // Este evento é mais confiável para detectar quando a página está sendo realmente fechada
-  if (!navegandoNoSite) {
-    const currentUser = localStorage.getItem('currentUser');
-    
-    // Limpar carrinho se não estiver logado
-    if (!currentUser) {
-      localStorage.removeItem('carrinho');
-    }
-    
-    // OPCIONAL: Descomente a linha abaixo se quiser logout automático ao fechar aba
-    // localStorage.removeItem('currentUser');
-  }
-});
-
-// MODIFICADO: Detectar quando a página/aba está sendo fechada
+// Detectar quando a página está sendo realmente fechada (não apenas mudando de foco)
 document.addEventListener('visibilitychange', function() {
   if (document.visibilityState === 'hidden' && !navegandoNoSite) {
-    // Aguardar tempo para verificar se realmente está fechando
+    // Aguardar um tempo maior para verificar se realmente está fechando
     setTimeout(() => {
-      // Se ainda está oculta e não está navegando, pode ter sido fechada
+      // Se ainda está oculta e não está navegando, então foi fechada
       if (document.visibilityState === 'hidden' && !navegandoNoSite) {
         const currentUser = localStorage.getItem('currentUser');
         
@@ -427,10 +356,10 @@ document.addEventListener('visibilitychange', function() {
           localStorage.removeItem('carrinho');
         }
         
-        // OPCIONAL: Logout automático desabilitado para manter sessão
-        // localStorage.removeItem('currentUser');
+        // Deslogar usuário
+        localStorage.removeItem('currentUser');
       }
-    }, 5000);
+    }, 3000); // Delay maior de 3 segundos
   }
 });
 
@@ -454,7 +383,6 @@ function abrirGerenciarCupons() {
   // Implementar funcionalidade de gerenciar cupons
   console.log('Abrir gerenciar cupons');
 }
-
 // NOVA FUNÇÃO: Navegar para página de admin
 function irParaAdmin() {
   const currentUser = localStorage.getItem('currentUser');
@@ -477,7 +405,6 @@ function irParaAdmin() {
   // Redirecionar para página de admin
   window.location.href = '../admin/admin.html';
 }
-
 // Funções básicas de cookies
 function setCookie(nome, valor, dias) {
   const data = new Date();
